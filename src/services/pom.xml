@@ -30,18 +30,23 @@
         <geofence-version>3.5-SNAPSHOT</geofence-version>
         <main-prefix>geofence</main-prefix>
 
-        <gt-version>21-SNAPSHOT</gt-version>
+        <gt-version>22-SNAPSHOT</gt-version>
 
-        <cxf-version>3.1.5</cxf-version>
+        <cxf-version>3.3.2</cxf-version>
         <activemq-version>5.3.0.4-fuse</activemq-version>
 
-        <spring-version>4.2.5.RELEASE</spring-version>
-        <spring-security-version>4.0.4.RELEASE</spring-security-version>
+        <spring-version>5.1.1.RELEASE</spring-version>
+        <spring-security-version>5.1.5.RELEASE</spring-security-version>
+
+        <!--<spring-ws-version>1.0.1</spring-ws-version>-->
+
+        <!--<spring-version>4.2.5.RELEASE</spring-version>-->
+        <!--<spring-security-version>4.0.4.RELEASE</spring-security-version>-->
 
         <camel-version>1.6.1.2-fuse</camel-version>
 
-        <velocity-version>1.6.2</velocity-version>
-        <javax-mail-version>1.4</javax-mail-version>
+        <!--<velocity-version>1.6.2</velocity-version>-->
+        <!--<javax-mail-version>1.4</javax-mail-version>-->
         <xalan-version>2.7.0</xalan-version>
         <xercesImpl-version>2.8.1</xercesImpl-version>
         <xml-apis-version>1.3.03</xml-apis-version>
@@ -54,12 +59,12 @@
         <postgresql.jdbc.version>42.1.1</postgresql.jdbc.version>
         <postgis.jdbc.version>1.3.3</postgis.jdbc.version>
 
-        <commons-logging-version>1.1.2</commons-logging-version>
-        <commons-lang-version>2.3</commons-lang-version>
-        <commons-collections-version>3.2</commons-collections-version>
-        <commons-beanutils-version>1.7.0</commons-beanutils-version>
-        <commons-dbcp-version>1.2.2</commons-dbcp-version>
-        <commons-codec-version>1.4</commons-codec-version>
+        <!--<commons-logging-version>1.1.2</commons-logging-version>-->
+        <!--<commons-lang-version>2.3</commons-lang-version>-->
+        <!--<commons-collections-version>3.2</commons-collections-version>-->
+        <!--<commons-beanutils-version>1.7.0</commons-beanutils-version>-->
+        <!--<commons-dbcp-version>1.2.2</commons-dbcp-version>-->
+        <!--<commons-codec-version>1.4</commons-codec-version>-->
 
         <geronimo-specs-version>1.1</geronimo-specs-version>
         <dozer-version>4.0</dozer-version>
@@ -70,12 +75,10 @@
 
         <xbean-version>3.1.0.2-fuse</xbean-version>
 
-        <spring-support>2.0.8</spring-support>
-        <spring-ws-version>1.0.1</spring-ws-version>
         <aspectj-version>1.5.4</aspectj-version>
         <ubl-version>2.0</ubl-version>
         <jetty-version>9.2.13.v20150730</jetty-version>
-        <jettison-version>1.2</jettison-version>
+        <!--<jettison-version>1.2</jettison-version>-->
 
         <asm-version>2.2.3</asm-version>
         <cglib-version>2.2</cglib-version>
@@ -190,24 +193,24 @@
                 <version>${geofence-version}</version>
             </dependency>
 
-			<dependency>
+            <dependency>
                 <groupId>org.geoserver.geofence</groupId>
                 <artifactId>geofence-ldap</artifactId>
                 <version>${geofence-version}</version>
             </dependency>
 
-		    <!-- =========================================================== -->
-		    <!--     GeoServer Manager                                       -->
-		    <!-- =========================================================== -->
-			<dependency>
-				<groupId>it.geosolutions</groupId>
-				<artifactId>geoserver-manager</artifactId>
-				<version>${gsmanager-version}</version>
-			</dependency>
+            <!-- =========================================================== -->
+            <!--     GeoServer Manager                                       -->
+            <!-- =========================================================== -->
+            <dependency>
+                <groupId>it.geosolutions</groupId>
+                <artifactId>geoserver-manager</artifactId>
+                <version>${gsmanager-version}</version>
+            </dependency>
 
-		    <!-- =========================================================== -->
-		    <!--     Quartz                                                  -->
-		    <!-- =========================================================== -->
+            <!-- =========================================================== -->
+            <!--     Quartz                                                  -->
+            <!-- =========================================================== -->
             <dependency>
                 <groupId>quartz</groupId>
                 <artifactId>quartz</artifactId>
@@ -286,12 +289,12 @@
             <dependency>
                 <groupId>commons-lang</groupId>
                 <artifactId>commons-lang</artifactId>
-                <version>${commons-lang-version}</version>
+                <version>2.6</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>1.4</version>
+                <version>2.6</version>
             </dependency>
             <dependency>
                 <groupId>commons-httpclient</groupId>
@@ -301,28 +304,28 @@
             <dependency>
                 <groupId>commons-dbcp</groupId>
                 <artifactId>commons-dbcp</artifactId>
-                <version>${commons-dbcp-version}</version>
+                <version>1.4</version>
             </dependency>
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
-                <version>${commons-beanutils-version}</version>
+                <version>1.9.3</version>
             </dependency>
             <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
-                <version>${commons-collections-version}</version>
+                <version>3.2.2</version>
             </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>${commons-codec-version}</version>
+                <version>1.12</version>
 <!--				  <scope>provided</scope>-->
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
-                <version>${commons-logging-version}</version>
+                <version>1.2</version>
             </dependency>
 
 		    <!-- =========================================================== -->
@@ -409,143 +412,78 @@
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity</artifactId>
-                <version>${velocity-version}</version>
+                <version>1.7</version>
             </dependency>
 
             <dependency>
                 <groupId>javax.mail</groupId>
                 <artifactId>mail</artifactId>
-                <version>${javax-mail-version}</version>
+                <version>1.4.7</version>
             </dependency>
 
             <!-- =========================================================== -->
             <!--     JAXB                                                    -->
             <!-- =========================================================== -->
+
+            <!-- JAXB for Java 11 -->
             <dependency>
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
-                <version>2.2.12</version>
+                <version>2.4.0-b180830.0359</version>
             </dependency>
             <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-impl</artifactId>
-                <version>2.2.11</version>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>2.4.0-b180830.0438</version>
+            </dependency>
+
+            <!-- JAXWS for Java 11 -->
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>jaxws-rt</artifactId>
+                <version>2.3.1</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.ws</groupId>
+                <artifactId>rt</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>1.3.2</version>
             </dependency>
 
             <!-- =========================================================== -->
             <!--     SPRING                                                  -->
             <!-- =========================================================== -->
+            
             <dependency>
                 <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
+                <artifactId>spring-framework-bom</artifactId>
                 <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jmx</artifactId>
-                <version>${spring-support}</version>
-<!--                <scope>provided</scope>-->
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${spring-version}</version>
-<!--                <scope>provided</scope>-->
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${spring-version}</version>
-<!--                <scope>provided</scope>-->
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring-version}</version>
-<!--                <scope>provided</scope>-->
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-orm</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-remoting</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
 
-		    <!-- =========================================================== -->
-		    <!--     SPRING SECURITY                                         -->
-		    <!-- =========================================================== -->
+            <!-- =========================================================== -->
+            <!--     SPRING SECURITY                                         -->
+            <!-- =========================================================== -->
+            
             <dependency>
                 <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-core</artifactId>
+                <artifactId>spring-security-bom</artifactId>
                 <version>${spring-security-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-expression</artifactId>
-					</exclusion>
-				</exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-taglibs</artifactId>
-                <version>${spring-security-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-expression</artifactId>
-					</exclusion>
-				</exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-acl</artifactId>
-                <version>${spring-security-version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-expression</artifactId>
-					</exclusion>
-				</exclusions>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
-		    <!-- =========================================================== -->
-		    <!--     JAVAX SERVLET                                           -->
-		    <!-- =========================================================== -->
+            <!-- =========================================================== -->
+            <!--     JAVAX SERVLET                                           -->
+            <!-- =========================================================== -->
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
@@ -559,17 +497,17 @@
             <dependency>
                 <groupId>asm</groupId>
                 <artifactId>asm</artifactId>
-                <version>${asm-version}</version>
+                <version>3.3.1</version>
             </dependency>
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
-                <version>${cglib-version}</version>
+                <version>3.2.12</version>
             </dependency>
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib-nodep</artifactId>
-                <version>${cglib-version}</version>
+                <version>3.2.12</version>
             </dependency>
 
 		    <!-- =========================================================== -->
@@ -578,7 +516,7 @@
             <dependency>
                 <groupId>org.codehaus.jettison</groupId>
                 <artifactId>jettison</artifactId>
-                <version>${jettison-version}</version>
+                <version>1.4.0</version>
             </dependency>
 
             <dependency>
@@ -644,7 +582,7 @@
                 <artifactId>hibernate-ehcache</artifactId>
                 <version>${hibernate-version}</version>
             </dependency>
-            
+
 
 		    <!-- =========================================================== -->
 		    <!--     HIBERNATE-SPATIAL                                       -->
@@ -686,7 +624,7 @@
                         <groupId>org.postgis</groupId>
                         <artifactId>postgis-stubs</artifactId>
                     </exclusion>
-                </exclusions>                
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -818,29 +756,23 @@
     <build>
         <plugins>
             <!-- compilation -->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <!-- LOOK OUT: YOU SHOULD USE >= 3.8.0! -->
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>11</release>
                     <debug>true</debug>
-                    <encoding>UTF-8</encoding>
-					       <!--
-					           On the win32 build box the compiler oom's due to the compiler accumulating
-					           too many classes in the permanent generation, similar to GEOT-2462
-					       -->
-                    <fork>true</fork>
-                    <meminitial>128M</meminitial>
-                    <maxmem>1512M</maxmem>
+                    <encoding>UTF-8</encoding>                    
                 </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.1.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -849,7 +781,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
+                <version>2.22.2</version>
                 <configuration>
 <!--                <includes>
                         <include>**/Test*.java</include>
@@ -863,7 +795,7 @@
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ftp</artifactId>
-                <version>2.10</version>
+                <version>3.3.3</version>
             </extension>
         </extensions>
 
