@@ -11,8 +11,6 @@ import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
 import org.locationtech.jts.simplify.TopologyPreservingSimplifier;
 
-import jaitools.jts.Utils;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

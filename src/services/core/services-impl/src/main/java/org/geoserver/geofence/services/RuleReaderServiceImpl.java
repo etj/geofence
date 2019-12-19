@@ -5,15 +5,17 @@
 
 package org.geoserver.geofence.services;
 
-import com.googlecode.genericdao.search.Filter;
-import com.googlecode.genericdao.search.Search;
 import org.locationtech.jts.geom.Geometry;
 import org.apache.commons.lang.StringUtils;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
 import org.geoserver.geofence.core.dao.AdminRuleDAO;
 import org.geoserver.geofence.core.dao.LayerDetailsDAO;
 import org.geoserver.geofence.core.dao.RuleDAO;
+import org.geoserver.geofence.core.dao.search.Filter;
+import org.geoserver.geofence.core.dao.search.Search;
 import org.geoserver.geofence.core.model.*;
 import org.geoserver.geofence.core.model.enums.AccessType;
 import org.geoserver.geofence.core.model.enums.AdminGrantType;
@@ -29,7 +31,9 @@ import org.geoserver.geofence.services.dto.RuleFilter.TextFilter;
 import org.geoserver.geofence.services.dto.ShortRule;
 import org.geoserver.geofence.services.exception.BadRequestServiceEx;
 import org.geoserver.geofence.services.util.AccessInfoInternal;
+
 import org.geoserver.geofence.spi.UserResolver;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;

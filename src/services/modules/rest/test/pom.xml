@@ -71,8 +71,8 @@
         <!-- =============================================================== -->
         <!-- =============================================================== -->
         <dependency>
-            <groupId>org.hibernatespatial</groupId>
-            <artifactId>hibernate-spatial-h2-geodb</artifactId>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-spatial</artifactId>
         </dependency>
         <!-- =============================================================== -->
         <!-- APACHE COMMONS -->

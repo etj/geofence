@@ -5,13 +5,13 @@
 
 package org.geoserver.geofence.services.util;
 
-import com.googlecode.genericdao.search.Filter;
-import com.googlecode.genericdao.search.Search;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.geoserver.geofence.core.dao.search.Filter;
+import org.geoserver.geofence.core.dao.search.Search;
 import org.geoserver.geofence.core.model.IPRangeProvider;
 import org.geoserver.geofence.services.dto.RuleFilter;
 import org.geoserver.geofence.services.exception.BadRequestServiceEx;
