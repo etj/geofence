@@ -599,7 +599,7 @@ public class RuleReaderServiceImpl implements RuleReaderService {
     }
 
     protected List<Rule> getRuleAux(RuleFilter filter, TextFilter roleFilter) {
-        Search searchCriteria = new Search(Rule.class);
+        Search searchCriteria = ruleDAO.createSearch();
         searchCriteria.addSortAsc("priority");
         addStringCriteria(searchCriteria, "username", filter.getUser());
         addStringCriteria(searchCriteria, "rolename", roleFilter);
@@ -626,14 +626,14 @@ public class RuleReaderServiceImpl implements RuleReaderService {
 
             case IDVALUE:
                 searchCriteria.addFilterOr(
-                        Filter.isNull(fieldName),
-                        Filter.equal(fieldName + ".id", filter.getId()));
+                        searchCriteria.isNull(fieldName),
+                        searchCriteria.isEqual(fieldName + ".id", filter.getId()));
                 break;
 
             case NAMEVALUE:
                 searchCriteria.addFilterOr(
-                        Filter.isNull(fieldName),
-                        Filter.equal(fieldName + ".name", filter.getName()));
+                        searchCriteria.isNull(fieldName),
+                        searchCriteria.isEqual(fieldName + ".name", filter.getName()));
                 break;
 
             default:
@@ -652,8 +652,8 @@ public class RuleReaderServiceImpl implements RuleReaderService {
 
             case NAMEVALUE:
                 searchCriteria.addFilterOr(
-                        Filter.isNull(fieldName),
-                        Filter.equal(fieldName, filter.getText()));
+                        searchCriteria.isNull(fieldName),
+                        searchCriteria.isEqual(fieldName, filter.getText()));
                 break;
 
             case IDVALUE:
@@ -737,7 +737,7 @@ public class RuleReaderServiceImpl implements RuleReaderService {
     }
 
     protected AdminRule getAdminAuthAux(RuleFilter filter, TextFilter roleFilter) {
-        Search searchCriteria = new Search(AdminRule.class);
+        Search searchCriteria = adminRuleDAO.createSearch();
         searchCriteria.addSortAsc("priority");
         addStringCriteria(searchCriteria, "username", filter.getUser());
         addStringCriteria(searchCriteria, "rolename", roleFilter);
