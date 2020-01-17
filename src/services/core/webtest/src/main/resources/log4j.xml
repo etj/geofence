@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-/* (c) 2014 Open Source Geospatial Foundation - all rights reserved
- * This code is licensed under the GPL 2.0 license, available at the root
- * application directory.
- */
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/' debug="true">
 
-
--->
-
-<configuration>
-
-    <properties>
+<!--    <properties>
         <property name="geofence_logpath">logs/</property>
-    </properties>
+    </properties>-->
 
-    <appenders>
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" 
+                    value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+        </layout>
+    </appender>
+
+<!--    <appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{ABSOLUTE} %5p %c{1}:%L - %m%n"/>
         </Console>
 
-<!--        <RollingFile name="R"
+        <RollingFile name="R"
                  fileName="${sys:geofence_logpath}/geofence.log"
                  filePattern="${sys:geofence_logpath}/$${date:yyyy-MM}/geofence-%d{MM-dd-yyyy}-%i.log.gz">
             <PatternLayout>
@@ -30,8 +29,8 @@
                 <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>
             <DefaultRolloverStrategy max="10"/>
-        </RollingFile> -->
-    </appenders>
+        </RollingFile> 
+    </appenders>-->
   
     <!-- 
         <logger name="org.hibernate">
@@ -40,14 +39,16 @@
         </logger>
     -->
 
-    <loggers>
-        <logger name="org.geoserver.geofence" level="debug">
+    <!--<loggers>-->
+        <logger name="org.geoserver.geofence">
+            <level value="DEBUG" />
             <!--<appender-ref ref="R"/>-->
         </logger>
 
-        <root level="info">
-            <appender-ref ref="STDOUT" />
+        <root>
+            <level value="INFO" />
+            <appender-ref ref="console" />
             <!--<appender-ref ref="R" />-->
         </root>
-    </loggers>
-</configuration>
+    <!--</loggers>-->
+</log4j:configuration>
