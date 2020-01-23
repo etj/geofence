@@ -5,25 +5,17 @@
 
 package org.geoserver.geofence.services.rest.exception;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Used as a catchall when forwarding exceptions
  *
  * @author ETj (etj at geo-solutions.it)
  */
-public abstract class GeoFenceRestEx extends WebApplicationException {
+public abstract class GeoFenceRestEx extends ResponseStatusException {
 
-    private String message;
-
-    public GeoFenceRestEx(String message, Response response) {
-        super(response);
-        this.message = message;
-    }
-
-    @Override
-    public String getMessage() {
-        return message;
+    protected GeoFenceRestEx(HttpStatus status, String reason) {
+        super(status, reason);
     }
 }

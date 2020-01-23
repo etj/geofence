@@ -21,19 +21,20 @@ import org.geoserver.geofence.services.rest.model.RESTInputGroup;
 import org.geoserver.geofence.services.rest.model.RESTInputInstance;
 import org.geoserver.geofence.services.rest.model.RESTInputRule;
 import org.geoserver.geofence.services.rest.model.RESTInputUser;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RestController("restBatchService")
 public class RESTBatchServiceImpl
         extends BaseRESTServiceImpl
         implements InitializingBean, RESTBatchService
@@ -56,9 +57,10 @@ public class RESTBatchServiceImpl
 
     @Transactional(value="geofenceTransactionManager")
     @Override
-    public Response exec(RESTBatch batch) throws BadRequestRestEx, NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity exec(RESTBatch batch) throws BadRequestRestEx, NotFoundRestEx, InternalErrorRestEx {
         runBatch(batch);
-        return Response.status(Status.OK).entity("OK\n").build();
+        return ResponseEntity.ok("OK\n");
+
     }
 
     public void runBatch(RESTBatch batch) throws BadRequestRestEx, NotFoundRestEx, InternalErrorRestEx {

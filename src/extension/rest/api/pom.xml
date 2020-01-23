@@ -44,28 +44,39 @@
         <!--  Misc support libs -->
         <!-- ================================================================-->
 
-        <dependency>
+<!--        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>-->
+
+<!--        <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxrs</artifactId>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+<!--        <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>jsr250-api</artifactId>
             <version>1.0</version>
-        </dependency>
+        </dependency>-->
 
 
-
-        <dependency>
+<!--        <dependency>
             <groupId>javassist</groupId>
             <artifactId>javassist</artifactId>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>5.1.1.RELEASE</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
 

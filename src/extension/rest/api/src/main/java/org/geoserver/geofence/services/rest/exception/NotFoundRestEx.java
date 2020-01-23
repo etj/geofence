@@ -5,8 +5,7 @@
 
 package org.geoserver.geofence.services.rest.exception;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -20,6 +19,6 @@ public class NotFoundRestEx extends GeoFenceRestEx {
     private static final long serialVersionUID = 1263563388095079971L;
 
     public NotFoundRestEx(String message) {
-        super(message, Response.status(Status.NOT_FOUND).type("text/plain").entity(message).build());
+        super(HttpStatus.NOT_FOUND, message);
     }
 }

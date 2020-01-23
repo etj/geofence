@@ -9,91 +9,95 @@ import org.geoserver.geofence.services.rest.exception.BadRequestRestEx;
 import org.geoserver.geofence.services.rest.exception.InternalErrorRestEx;
 import org.geoserver.geofence.services.rest.exception.NotFoundRestEx;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.cxf.jaxrs.ext.multipart.Multipart;
 import org.geoserver.geofence.services.rest.model.RESTInputAdminRule;
 import org.geoserver.geofence.services.rest.model.RESTOutputAdminRule;
 import org.geoserver.geofence.services.rest.model.RESTOutputAdminRuleList;
 
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  *
  * @author Emanuele Tajariol (etj at geo-solutions.it)
  */
 
-@Path("/")
+@RequestMapping(path = "/adminrules")
 public interface RESTAdminRuleService
 {
-    @POST
-    @Path("/")
-    @Produces(MediaType.APPLICATION_XML)
-    Response insert(@Multipart("rule") RESTInputAdminRule rule) throws BadRequestRestEx, NotFoundRestEx;
+    @PostMapping( //
+            path = "/", //
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )    
+    ResponseEntity<Long> insert(@RequestBody RESTInputAdminRule rule) throws BadRequestRestEx, NotFoundRestEx;
 
-    @GET
-    @Path("/id/{id}")
-    @Produces(MediaType.APPLICATION_XML)
-    RESTOutputAdminRule get(@PathParam("id") Long id) throws BadRequestRestEx, NotFoundRestEx;
+    @GetMapping( //
+            path = "/id/{id}", //
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )    
+    RESTOutputAdminRule get(@PathVariable("id") Long id) throws BadRequestRestEx, NotFoundRestEx;
 
-    @PUT
-    @Path("/id/{id}")
-    @Produces(MediaType.APPLICATION_XML)
-    void update(@PathParam("id") Long id,
-        @Multipart("rule") RESTInputAdminRule rule) throws BadRequestRestEx, NotFoundRestEx;
+    @PutMapping( //
+            path = "/id/{id}", //
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )    
+    void update(@PathVariable("id") Long id,
+        @RequestBody RESTInputAdminRule rule) throws BadRequestRestEx, NotFoundRestEx;
 
-    @DELETE
-    @Path("/id/{id}")
-    @Produces(MediaType.APPLICATION_XML)
-    Response delete(@PathParam("id") Long id) throws BadRequestRestEx, NotFoundRestEx;
+    @DeleteMapping( //
+            path = "/id/{id}", //
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )    
+    ResponseEntity delete(@PathVariable("id") Long id) throws BadRequestRestEx, NotFoundRestEx;
 
-    @GET
-    @Path("/")
-    @Produces(MediaType.APPLICATION_XML)
+    @GetMapping( //
+            path = "/", //
+            produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )    
     RESTOutputAdminRuleList get(
-        @QueryParam("page") Integer page,
-        @QueryParam("entries") Integer entries,
-        @QueryParam("full")@DefaultValue("false")  boolean full,
+        @RequestParam("page") Integer page,
+        @RequestParam("entries") Integer entries,
+        @RequestParam(name="full", defaultValue = "false") boolean full,
 
-        @QueryParam("userName") String userName,
-        @QueryParam("userAny")  Boolean userAny,
+        @RequestParam("userName") String userName,
+        @RequestParam("userAny")  Boolean userAny,
 
-        @QueryParam("groupName") String groupName,
-        @QueryParam("groupAny")  Boolean groupAny,
+        @RequestParam("groupName") String groupName,
+        @RequestParam("groupAny")  Boolean groupAny,
 
-        @QueryParam("instanceId")   Long instanceId,
-        @QueryParam("instanceName") String  instanceName,
-        @QueryParam("instanceAny")  Boolean instanceAny,
+        @RequestParam("instanceId")   Long instanceId,
+        @RequestParam("instanceName") String  instanceName,
+        @RequestParam("instanceAny")  Boolean instanceAny,
 
-        @QueryParam("workspace") String  workspace,
-        @QueryParam("workspaceAny")  Boolean workspaceAny
+        @RequestParam("workspace") String  workspace,
+        @RequestParam("workspaceAny")  Boolean workspaceAny
 
     ) throws BadRequestRestEx, InternalErrorRestEx;
 
-    @GET
-    @Path("/count")
+    @GetMapping( //
+            path = "/count"
+    )    
     long count(
-        @QueryParam("userName") String userName,
-        @QueryParam("userAny")  Boolean userAny,
+        @RequestParam("userName") String userName,
+        @RequestParam("userAny")  Boolean userAny,
 
-        @QueryParam("groupName") String groupName,
-        @QueryParam("groupAny")  Boolean groupAny,
+        @RequestParam("groupName") String groupName,
+        @RequestParam("groupAny")  Boolean groupAny,
 
-        @QueryParam("instanceId")   Long instanceId,
-        @QueryParam("instanceName") String  instanceName,
-        @QueryParam("instanceAny")  Boolean instanceAny,
+        @RequestParam("instanceId")   Long instanceId,
+        @RequestParam("instanceName") String  instanceName,
+        @RequestParam("instanceAny")  Boolean instanceAny,
 
-        @QueryParam("workspace") String  workspace,
-        @QueryParam("workspaceAny")  Boolean workspaceAny
+        @RequestParam("workspace") String  workspace,
+        @RequestParam("workspaceAny")  Boolean workspaceAny
     );
 
 }

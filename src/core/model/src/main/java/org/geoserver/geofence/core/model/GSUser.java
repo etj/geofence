@@ -14,8 +14,10 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -34,7 +36,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.ForeignKey;
+//import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
 /**
@@ -98,9 +100,11 @@ public class GSUser implements Identifiable, Serializable {
 
     /** Groups to which the user is associated */
     @ManyToMany(fetch= FetchType.LAZY)
-    @JoinTable( name = "gf_user_usergroups", joinColumns = @JoinColumn(name = "user_id"),  inverseJoinColumns=@JoinColumn(name = "group_id") )
+    @JoinTable( name = "gf_user_usergroups", 
+            joinColumns = @JoinColumn(name = "user_id"),  
+            inverseJoinColumns=@JoinColumn(name = "group_id"), 
+            foreignKey = @ForeignKey(name="fk_uug_user") )
     @Column(name = "u_id")
-    @ForeignKey(name="fk_uug_user", inverseName="fk_uug_group")
     @Fetch(FetchMode.SUBSELECT) // without this, hibernate will duplicate results(!)
     private Set<UserGroup> userGroups = new HashSet<UserGroup>();
 

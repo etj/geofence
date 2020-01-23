@@ -5,12 +5,10 @@
 
 package org.geoserver.geofence.services.rest.impl;
 
+import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import org.apache.commons.lang.StringUtils;
 
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.MultiPolygon;
@@ -53,11 +51,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Comparator;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RestController("restRuleService")
+@ResponseBody
 public class RESTRuleServiceImpl
         extends BaseRESTServiceImpl
         implements RESTRuleService {
@@ -87,7 +90,7 @@ public class RESTRuleServiceImpl
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, value = "geofenceTransactionManager")
-    public Response insert(RESTInputRule inputRule) throws NotFoundRestEx, BadRequestRestEx, InternalErrorRestEx {
+    public ResponseEntity insert(RESTInputRule inputRule) throws NotFoundRestEx, BadRequestRestEx, InternalErrorRestEx {
 
         if (inputRule.getPosition() == null || inputRule.getPosition().getPosition() == null) {
             throw new BadRequestRestEx("Bad position: " + inputRule.getPosition());
@@ -113,7 +116,11 @@ public class RESTRuleServiceImpl
                 ruleAdminService.setDetails(id, details);
             }
 
-            return Response.status(Status.CREATED).tag(id.toString()).entity(id).build();
+            return ResponseEntity
+                    .created(URI.create(id.toString()))
+                    .eTag(id.toString())
+                    .body(id);
+            
         } catch (BadRequestServiceEx ex) {
             LOGGER.error(ex.getMessage());
             throw new BadRequestRestEx(ex.getMessage());
@@ -316,14 +323,14 @@ public class RESTRuleServiceImpl
     }
 
     @Override
-    public Response delete(Long id) throws NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity delete(Long id) throws NotFoundRestEx, InternalErrorRestEx {
         try {
             if (!ruleAdminService.delete(id)) {
                 LOGGER.warn("Rule not found: " + id);
                 throw new NotFoundRestEx("Rule not found: " + id);
             }
 
-            return Response.status(Status.OK).entity("OK\n").build();
+            return ResponseEntity.ok("OK\n");
 
         } catch (GeoFenceRestEx ex) { // already handled
             throw ex;
@@ -434,27 +441,27 @@ public class RESTRuleServiceImpl
     }
 
     @Override
-    public long count(
-            String userName, Boolean userDefault,
-            String roleName, Boolean groupDefault,
-            Long instanceId, String instanceName, Boolean instanceDefault,
-            String serviceName, Boolean serviceDefault,
-            String requestName, Boolean requestDefault,
-            String workspace, Boolean workspaceDefault,
-            String layer, Boolean layerDefault)
+    public Long count(
+            String userName, Boolean userAny,
+            String groupName, Boolean groupAny,
+            Long instanceId, String instanceName, Boolean instanceAny,
+            String serviceName, Boolean serviceAny,
+            String requestName, Boolean requestAny,
+            String workspace, Boolean workspaceAny,
+            String layer, Boolean layerAny)
             throws BadRequestRestEx, InternalErrorRestEx {
 
         RuleFilter filter = buildFilter(
-                userName, userDefault,
-                roleName, groupDefault,
-                instanceId, instanceName, instanceDefault,
-                serviceName, serviceDefault,
-                requestName, requestDefault,
-                workspace, workspaceDefault,
-                layer, layerDefault);
+                userName, userAny,
+                groupName, groupAny,
+                instanceId, instanceName, instanceAny,
+                serviceName, serviceAny,
+                requestName, requestAny,
+                workspace, workspaceAny,
+                layer, layerAny);
 
         try {
-            return ruleAdminService.count(filter);
+            return (Long)ruleAdminService.count(filter);
         } catch (Exception ex) {
             LOGGER.error(ex);
             throw new InternalErrorRestEx(ex.getMessage());
@@ -463,7 +470,7 @@ public class RESTRuleServiceImpl
     }
     
     @Override
-    public Response move(String rulesIds, Integer targetPriority)
+    public ResponseEntity move(String rulesIds, Integer targetPriority)
             throws BadRequestRestEx, InternalErrorRestEx {
             
         try {
@@ -480,7 +487,8 @@ public class RESTRuleServiceImpl
                     priority++;
                 }
             }            
-            return Response.status(Status.OK).entity("OK\n").build();
+            return ResponseEntity.ok("OK\n");
+            
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             throw new InternalErrorRestEx(ex.getMessage());
@@ -573,7 +581,8 @@ public class RESTRuleServiceImpl
             rule.setInstance(getInstance(in.getInstance()));
         }
 
-        if(StringUtils.isNotBlank(in.getIpaddress())) {
+        String ip = in.getIpaddress();
+        if(ip != null && ! ip.isBlank()) {
             rule.setAddressRange(new IPAddressRange(in.getIpaddress()));
         }
 

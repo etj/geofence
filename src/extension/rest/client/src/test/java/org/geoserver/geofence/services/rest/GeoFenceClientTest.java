@@ -21,8 +21,7 @@ import org.geoserver.geofence.services.rest.model.util.IdName;
 
 import java.net.ConnectException;
 import java.util.Arrays;
-import javax.ws.rs.core.Response;
-import org.apache.log4j.LogManager;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 import org.junit.AfterClass;
@@ -31,13 +30,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assume.*;
 import static org.junit.Assert.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
 public class GeoFenceClientTest {
-    private final static Logger LOGGER = LogManager.getLogger(GeoFenceClientTest.class);
+    private final static Logger LOGGER = Logger.getLogger(GeoFenceClientTest.class);
 
     public GeoFenceClientTest() {
     }
@@ -62,7 +63,7 @@ public class GeoFenceClientTest {
 
     protected GeoFenceClient createClient() {
         GeoFenceClient client = new GeoFenceClient();
-        client.setGeostoreRestUrl("http://localhost:9191/geofence/rest");
+        client.setBaseRestUrl("http://localhost:9191/geofence/rest");
         client.setUsername("admin");
         client.setPassword("admin");
 
@@ -72,10 +73,10 @@ public class GeoFenceClientTest {
     protected void removeAll() {
         LOGGER.info("Removing GeoFence resources...");
         GeoFenceClient client = createClient();
+        removeRules(client);
         removeUsers(client);
         removeGroups(client);
         removeInstances(client);
-        removeRules(client);
         LOGGER.info("Finished removing GeoFence resources...");
     }
 
@@ -203,7 +204,7 @@ public class GeoFenceClientTest {
         }
 
         {
-            assertEquals(1, client.getUserService().count("%"));
+            assertEquals(1, (long)client.getUserService().count("%"));
             assertEquals(1, client.getUserService().get("pippo").getGroups().size());
         }
 
@@ -252,9 +253,11 @@ public class GeoFenceClientTest {
         inputRule.setGrant(GrantType.ALLOW);
         inputRule.setPosition(new RESTRulePosition(RESTRulePosition.RulePosition.offsetFromTop, 0));
 
-        Response response = client.getRuleService().insert(inputRule);
-        assertNotNull(response.getEntityTag());
-        String id = response.getEntityTag().getValue();
+        ResponseEntity response = client.getRuleService().insert(inputRule);
+        List<String> etag = response.getHeaders().get(HttpHeaders.ETAG);
+        assertNotNull(etag);
+        assertFalse(etag.isEmpty());
+        String id = etag.get(0);
         assertNotNull(id);
 
         RESTOutputRule outRule = client.getRuleService().get(Long.parseLong(id));

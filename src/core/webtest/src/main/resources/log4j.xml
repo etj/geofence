@@ -39,14 +39,17 @@
         </logger>
     -->
 
-    <!--<loggers>-->
         <logger name="org.geoserver.geofence">
             <level value="DEBUG" />
-            <!--<appender-ref ref="R"/>-->
+        </logger>
+
+    <!--<loggers>-->
+        <logger name="org.hibernate">
+            <level value="INFO" />
         </logger>
 
         <root>
-            <level value="INFO" />
+            <level value="DEBUG" />
             <appender-ref ref="console" />
             <!--<appender-ref ref="R" />-->
         </root>

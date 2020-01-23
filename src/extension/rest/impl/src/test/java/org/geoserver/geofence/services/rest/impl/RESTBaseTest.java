@@ -20,50 +20,41 @@ import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import static org.junit.Assert.*;
 import org.junit.rules.TestName;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration("classpath*:applicationContext.xml")
+@ContextConfiguration(locations = "classpath*:applicationContext.xml")
 public abstract class RESTBaseTest {
     private static final Logger LOGGER = LogManager.getLogger(RESTBaseTest.class);
+    
+    @org.junit.Rule 
+    public TestName name = new TestName();
 
-    @org.junit.Rule public TestName name = new TestName();
+    @Autowired
+    protected WebApplicationContext ctx;
 
-    protected static ClassPathXmlApplicationContext ctx = null;
-
-    protected static RESTUserService restUserService;
-    protected static RESTUserGroupService restUserGroupService;
-    protected static RESTRuleService restRuleService;
+    @Autowired
+    protected  RESTUserService restUserService;
+    
+    @Autowired
+    protected  RESTUserGroupService restUserGroupService;
+    
+    @Autowired
+    protected  RESTRuleService restRuleService;
 
     public RESTBaseTest() {
-
-        synchronized(RESTBaseTest.class) {
-            if(ctx == null) {
-                String[] paths = {
-                        "classpath*:applicationContext.xml"
-//                         ,"applicationContext-test.xml"
-                };
-                ctx = new ClassPathXmlApplicationContext(paths);
-
-
-                for(String name : ctx.getBeanDefinitionNames()) {
-                    if(name.startsWith("rest") )
-                        LOGGER.warn("  BEAN ===> " + name);                    
-                }
-
-                restUserService       = (RESTUserService)ctx.getBean("restUserService");
-                restUserGroupService  = (RESTUserGroupService)ctx.getBean("restUserGroupService");
-                restRuleService       = (RESTRuleService)ctx.getBean("restRuleService");
-            }
-            
-            assertNotNull(restUserService);
-            assertNotNull(restUserGroupService);
-            assertNotNull(restRuleService);
-        }
     }
 
     @BeforeClass
@@ -80,6 +71,12 @@ public abstract class RESTBaseTest {
         LOGGER.info("============================== TEST " + name.getMethodName());
         LOGGER.info("");
 
+        assertNotNull("CTX not set", ctx);
+        assertNotNull("restUserService not set", restUserService);
+        assertNotNull("restUserGroupService not set", restUserGroupService);
+        assertNotNull("restRuleService not set", restRuleService);
+        
+        
         RESTOutputRuleList rules = restRuleService.get(null, null, false, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         for (RESTOutputRule rule : rules) {
             LOGGER.warn("Removing " + rule);

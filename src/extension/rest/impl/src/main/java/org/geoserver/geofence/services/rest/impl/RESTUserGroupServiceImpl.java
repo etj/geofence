@@ -5,6 +5,7 @@
 
 package org.geoserver.geofence.services.rest.impl;
 
+import java.net.URI;
 import java.util.List;
 
 import org.geoserver.geofence.core.model.UserGroup;
@@ -21,17 +22,18 @@ import org.geoserver.geofence.services.rest.exception.InternalErrorRestEx;
 import org.geoserver.geofence.services.rest.exception.NotFoundRestEx;
 import org.geoserver.geofence.services.rest.model.RESTInputGroup;
 import org.geoserver.geofence.services.rest.model.config.RESTFullUserGroupList;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RestController("restUserGroupService")
 public class RESTUserGroupServiceImpl
         extends BaseRESTServiceImpl
         implements RESTUserGroupService {
@@ -65,7 +67,7 @@ public class RESTUserGroupServiceImpl
     }
 
     @Override
-    public Response insert(RESTInputGroup userGroup) throws NotFoundRestEx, InternalErrorRestEx, ConflictRestEx {
+    public ResponseEntity insert(RESTInputGroup userGroup) throws NotFoundRestEx, InternalErrorRestEx, ConflictRestEx {
 
         // check that no group with same name exists
         boolean exists;
@@ -92,7 +94,11 @@ public class RESTUserGroupServiceImpl
             insert.setName(userGroup.getName());
 
             Long id = userGroupAdminService.insert(insert);
-            return Response.status(Status.CREATED).tag(id.toString()).entity(id).build();
+            
+            return ResponseEntity
+                    .created(URI.create(id.toString()))
+                    .eTag(id.toString())
+                    .body(id);
 
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
@@ -140,7 +146,7 @@ public class RESTUserGroupServiceImpl
     }
 
     @Override
-    public Response delete(String name, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity delete(String name, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
         try {
             if ( cascade ) {
                 ruleAdminService.deleteRulesByRole(name);
@@ -161,7 +167,7 @@ public class RESTUserGroupServiceImpl
                 throw new NotFoundRestEx("Role not found: " + name);
             }
 
-            return Response.status(Status.OK).entity("OK\n").build();
+            return ResponseEntity.ok("OK\n");
 
         } catch (GeoFenceRestEx ex) { // already handled
             throw ex;

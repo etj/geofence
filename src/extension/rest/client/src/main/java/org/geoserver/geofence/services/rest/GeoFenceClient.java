@@ -5,16 +5,9 @@
 
 package org.geoserver.geofence.services.rest;
 
-import org.geoserver.geofence.services.rest.RESTBatchService;
-import org.geoserver.geofence.services.rest.RESTUserGroupService;
-import org.geoserver.geofence.services.rest.RESTUserService;
-import org.geoserver.geofence.services.rest.RESTGSInstanceService;
-import org.geoserver.geofence.services.rest.RESTRuleService;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.cxf.common.util.Base64Utility;
-import org.apache.cxf.jaxrs.client.JAXRSClientFactory;
-import org.apache.cxf.jaxrs.client.WebClient;
 
 /**
  *
@@ -37,23 +30,27 @@ public class GeoFenceClient {
     // since it's specified in the applicationcontext, it can not be automatically retrieved by the proxy client
     
     protected <T>T getService(Class<T> clazz, String endpoint) {
+        
+        T proxy =  (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), 
+            new Class[] { clazz }, 
+            new DynamicInvocationHandler(clazz, restUrl));
+        
         if(services.containsKey(clazz))
             return (T)services.get(clazz);
 
         if(restUrl == null)
             new IllegalStateException("GeoFence URL not set");
 
-        synchronized(services) {
-//            T proxy = JAXRSClientFactory.create(restUrl, clazz, username, password, null);
+//        synchronized(services) {
+//            T proxy = JAXRSClientFactory.create(restUrl+"/"+endpoint, clazz);
+//            String authorizationHeader = "Basic "  + Base64Utility.encode((username+":"+password).getBytes());
+//            WebClient.client(proxy).header("Authorization", authorizationHeader);
             
-            T proxy = JAXRSClientFactory.create(restUrl+"/"+endpoint, clazz);
-            String authorizationHeader = "Basic "  + Base64Utility.encode((username+":"+password).getBytes());
-            WebClient.client(proxy).header("Authorization", authorizationHeader);
 
 //        WebClient.client(proxy).accept("text/xml");
             services.put(clazz, proxy);
             return proxy;
-        }
+//        }
     }
 
     //==========================================================================
@@ -100,7 +97,7 @@ public class GeoFenceClient {
         return restUrl;
     }
 
-    public void setGeostoreRestUrl(String restUrl) {
+    public void setBaseRestUrl(String restUrl) {
         this.restUrl = restUrl;
     }
 

@@ -5,8 +5,7 @@
 
 package org.geoserver.geofence.services.rest.exception;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -15,6 +14,6 @@ import javax.ws.rs.core.Response.Status;
 public class ConflictRestEx extends GeoFenceRestEx {
 
     public ConflictRestEx(String message) {
-        super(message, Response.status(Status.CONFLICT).type("text/plain").entity(message).build());
+        super(HttpStatus.CONFLICT, message);
     }
 }

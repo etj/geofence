@@ -5,6 +5,7 @@
 
 package org.geoserver.geofence.services.rest.impl;
 
+import java.net.URI;
 import java.util.List;
 
 import org.geoserver.geofence.core.model.GSInstance;
@@ -25,17 +26,17 @@ import org.geoserver.geofence.services.rest.model.RESTInputInstance;
 import org.geoserver.geofence.services.rest.model.RESTOutputInstance;
 import org.geoserver.geofence.services.rest.model.RESTShortInstanceList;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RestController("restInstanceService")
 public class RESTInstanceServiceImpl
         extends BaseRESTServiceImpl
         implements RESTGSInstanceService {
@@ -83,7 +84,7 @@ public class RESTInstanceServiceImpl
     }
 
     @Override
-    public Response insert(RESTInputInstance instance) throws NotFoundRestEx, InternalErrorRestEx, ConflictRestEx {
+    public ResponseEntity insert(RESTInputInstance instance) throws NotFoundRestEx, InternalErrorRestEx, ConflictRestEx {
 
         // check that no group with same name exists
         boolean exists;
@@ -112,8 +113,11 @@ public class RESTInstanceServiceImpl
             insert.setPassword(instance.getPassword());
 
             Long id = instanceAdminService.insert(insert);
-            return Response.status(Status.CREATED).tag(id.toString()).entity(id).build();
-
+            return ResponseEntity
+                    .created(URI.create(id.toString()))
+                    .eTag(id.toString())
+                    .body(id);
+            
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             throw new InternalErrorRestEx(ex.getMessage());
@@ -175,7 +179,7 @@ public class RESTInstanceServiceImpl
     }
 
     @Override
-    public Response delete(Long id, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity delete(Long id, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
         try {
             if ( cascade ) {
                 ruleAdminService.deleteRulesByInstance(id);
@@ -194,7 +198,7 @@ public class RESTInstanceServiceImpl
                 throw new NotFoundRestEx("GSInstance not found: " + id);
             }
 
-            return Response.status(Status.OK).entity("OK\n").build();
+            return ResponseEntity.ok("OK\n");            
 
         } catch (GeoFenceRestEx ex) { // already handled
             throw ex;
@@ -208,12 +212,13 @@ public class RESTInstanceServiceImpl
     }
 
     @Override
-    public Response delete(String name, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity delete(String name, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
         try {
             long id = instanceAdminService.get(name).getId();
             this.delete(id, cascade);
 
-            return Response.status(Status.OK).entity("OK\n").build();
+            return ResponseEntity.ok("OK\n");
+            
         } catch (NotFoundServiceEx ex) {
             LOGGER.warn("GSInstance not found: " + name);
             throw new NotFoundRestEx("GSInstance not found: " + name);

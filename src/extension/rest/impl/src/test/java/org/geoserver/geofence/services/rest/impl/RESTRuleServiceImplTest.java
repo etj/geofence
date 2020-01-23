@@ -18,13 +18,14 @@ import org.geoserver.geofence.services.rest.model.util.IdName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import javax.ws.rs.core.Response;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.geoserver.geofence.services.rest.model.RESTRulePosition;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -38,8 +39,8 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
     public void testInsert() {
         RESTInputGroup group = new RESTInputGroup();
         group.setName("g1");
-        Response res = restUserGroupService.insert(group);
-        long gid1 = (Long)res.getEntity();
+        ResponseEntity<Long> res = restUserGroupService.insert(group);
+        long gid1 = (Long)res.getBody();
 
 
         RESTInputUser user = new RESTInputUser();
@@ -47,14 +48,14 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
         user.setEnabled(Boolean.TRUE);
         user.setGroups(new ArrayList<IdName>());
         user.getGroups().add(new IdName("g1"));
-        Response userResp = restUserService.insert(user);
-        Long id = (Long)userResp.getEntity();
+        ResponseEntity<Long> userResp = restUserService.insert(user);
+        Long id = (Long)userResp.getBody();
 
         RESTInputRule rule = new RESTInputRule();
         rule.setUsername("user0");
 
         try{
-            restRuleService.insert(rule).getEntity();
+            restRuleService.insert(rule).getBody();
             fail("Missing position not trapped");
         } catch (BadRequestRestEx e) {
             LOGGER.info("Exception properly trapped");
@@ -63,7 +64,7 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
         rule.setPosition(new RESTRulePosition(RESTRulePosition.RulePosition.offsetFromTop, 0));
         rule.setGrant(GrantType.ALLOW);
 
-        Long rid = (Long)restRuleService.insert(rule).getEntity();
+        Long rid = (Long)restRuleService.insert(rule).getBody();
         assertNotNull(rid);
 
         {
@@ -85,13 +86,13 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
         rule.setConstraints(constraints);
 
         try {
-            restRuleService.insert(rule).getEntity();
+            restRuleService.insert(rule).getBody();
             fail("Missing layer not trapped");
         } catch (BadRequestRestEx e) {
             LOGGER.info("Exception properly trapped");
         }
         rule.setLayer("l0");
-        Long rid = (Long)restRuleService.insert(rule).getEntity();
+        Long rid = restRuleService.insert(rule).getBody();
         assertNotNull(rid);
     }
 
@@ -103,7 +104,7 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
         rule.setService("s0");
         rule.setWorkspace("w0");
         rule.setLayer("l0");
-        Long rid = (Long)restRuleService.insert(rule).getEntity();
+        Long rid = restRuleService.insert(rule).getBody();
         assertNotNull(rid);
 
         {
@@ -134,7 +135,7 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
         rule.setPosition(new RESTRulePosition(RESTRulePosition.RulePosition.offsetFromTop, 0));
         rule.setGrant(GrantType.ALLOW);
         rule.setLayer("l0");
-        Long rid = (Long)restRuleService.insert(rule).getEntity();
+        Long rid = (Long)restRuleService.insert(rule).getBody();
         assertNotNull(rid);
 
         {
@@ -177,7 +178,7 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
             constraints.setAllowedStyles(new HashSet<String>(Arrays.asList("s1","s2")));
             rule.setConstraints(constraints);
 
-            rid = (Long)restRuleService.insert(rule).getEntity();
+            rid = (Long)restRuleService.insert(rule).getBody();
             assertNotNull(rid);
         }
 
@@ -234,7 +235,7 @@ public class RESTRuleServiceImplTest extends RESTBaseTest {
                     )));
             rule.setConstraints(constraints);
 
-            rid = (Long)restRuleService.insert(rule).getEntity();
+            rid = (Long)restRuleService.insert(rule).getBody();
             assertNotNull(rid);
         }
 

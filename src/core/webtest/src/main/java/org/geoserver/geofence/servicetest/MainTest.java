@@ -41,21 +41,30 @@ import org.locationtech.jts.io.WKTReader;
 import org.geoserver.geofence.services.dto.RuleFilter;
 import org.geoserver.geofence.services.dto.RuleFilter.SpecialFilterType;
 import org.geoserver.geofence.services.exception.NotFoundServiceEx;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@Service
 public class MainTest implements InitializingBean, ApplicationContextAware {
 
     private final static Logger LOGGER = LogManager.getLogger(MainTest.class);
 
+    @Autowired
     private XmlWebApplicationContext applicationContext;
 
+    @Autowired
     private UserAdminService userAdminService;
+    @Autowired
     private UserGroupAdminService userGroupAdminService;
+    @Autowired
     private InstanceAdminService instanceAdminService;
+    @Autowired
     private RuleAdminService ruleAdminService;
+    @Autowired
     private RuleReaderService ruleReaderService;
 
     protected final static String MULTIPOLYGONWKT = "MULTIPOLYGON(((48 62, 48 63, 49 63, 49 62, 48 62)))";
@@ -292,31 +301,30 @@ public class MainTest implements InitializingBean, ApplicationContextAware {
 
     //==========================================================================
 
-    public void setInstanceAdminService(InstanceAdminService instanceAdminService) {
-        this.instanceAdminService = instanceAdminService;
-    }
-
-    public void setUserGroupAdminService(UserGroupAdminService userGroupAdminService) {
-        this.userGroupAdminService = userGroupAdminService;
-    }
-
-    public void setRuleAdminService(RuleAdminService ruleAdminService) {
-        this.ruleAdminService = ruleAdminService;
-    }
-
-    public void setUserAdminService(UserAdminService userAdminService) {
-        this.userAdminService = userAdminService;
-    }
-
-    public void setRuleReaderService(RuleReaderService ruleReaderService) {
-        this.ruleReaderService = ruleReaderService;
-    }
-
-
+//    public void setInstanceAdminService(InstanceAdminService instanceAdminService) {
+//        this.instanceAdminService = instanceAdminService;
+//    }
+//
+//    public void setUserGroupAdminService(UserGroupAdminService userGroupAdminService) {
+//        this.userGroupAdminService = userGroupAdminService;
+//    }
+//
+//    public void setRuleAdminService(RuleAdminService ruleAdminService) {
+//        this.ruleAdminService = ruleAdminService;
+//    }
+//
+//    public void setUserAdminService(UserAdminService userAdminService) {
+//        this.userAdminService = userAdminService;
+//    }
+//
+//    public void setRuleReaderService(RuleReaderService ruleReaderService) {
+//        this.ruleReaderService = ruleReaderService;
+//    }
+//
+//
     @Override
     public void setApplicationContext(ApplicationContext ac) throws BeansException {
         this.applicationContext = (XmlWebApplicationContext)ac;
-
     }
 
 }

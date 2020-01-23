@@ -5,8 +5,7 @@
 
 package org.geoserver.geofence.services.rest.exception;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -20,6 +19,6 @@ public class BadRequestRestEx extends GeoFenceRestEx {
     private static final long serialVersionUID = -2585698525010604674L;
 
     public BadRequestRestEx(String message) {
-        super(message, Response.status(Status.BAD_REQUEST).type("text/plain").entity(message).build());
+        super(HttpStatus.BAD_REQUEST, message);
     }
 }

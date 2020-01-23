@@ -24,7 +24,8 @@ import org.geoserver.geofence.services.rest.model.RESTShortUser;
 import org.geoserver.geofence.services.rest.model.util.IdName;
 
 import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;;
+import org.apache.log4j.Logger;import org.springframework.beans.factory.annotation.Autowired;
+;
 
 /**
  *
@@ -34,10 +35,15 @@ public abstract class BaseRESTServiceImpl {
 
     private static final Logger LOGGER = LogManager.getLogger(BaseRESTServiceImpl.class);
     
-    protected UserAdminService userAdminService;
+    @Autowired
+    protected UserAdminService userAdminService;    
+    @Autowired
     protected UserGroupAdminService userGroupAdminService;
+    @Autowired
     protected InstanceAdminService instanceAdminService;
+    @Autowired
     protected RuleAdminService ruleAdminService;
+    @Autowired
     protected AdminRuleAdminService adminRuleAdminService;
 
 

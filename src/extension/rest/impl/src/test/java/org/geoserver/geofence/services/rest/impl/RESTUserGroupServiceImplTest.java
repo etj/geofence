@@ -11,12 +11,12 @@ import org.geoserver.geofence.services.rest.model.RESTInputUser;
 import org.geoserver.geofence.services.rest.model.RESTOutputUser;
 import org.geoserver.geofence.services.rest.model.util.IdName;
 import java.util.ArrayList;
-import javax.ws.rs.core.Response;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.springframework.http.ResponseEntity;
 
 /**
  *
@@ -29,8 +29,8 @@ public class RESTUserGroupServiceImplTest extends RESTBaseTest {
     public void testInsert() {
         RESTInputGroup group = new RESTInputGroup();
         group.setName("g1");
-        Response res = restUserGroupService.insert(group);
-        long gid1 = (Long)res.getEntity();
+        ResponseEntity<Long> res = restUserGroupService.insert(group);
+        long gid1 = (Long)res.getBody();
 
         RESTInputUser user = new RESTInputUser();
         user.setName("user0");
@@ -38,8 +38,8 @@ public class RESTUserGroupServiceImplTest extends RESTBaseTest {
         user.setGroups(new ArrayList<IdName>());
         user.getGroups().add(new IdName("g1"));
 
-        Response userResp = restUserService.insert(user);
-        Long id = (Long)userResp.getEntity();
+        ResponseEntity<Long> userResp = restUserService.insert(user);
+        Long id = (Long)userResp.getBody();
 
         {
             RESTOutputUser out = restUserService.get("user0");

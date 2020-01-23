@@ -5,16 +5,20 @@
 
 package org.geoserver.geofence.services.rest.impl;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.geoserver.geofence.core.model.GSUser;
+import org.geoserver.geofence.core.model.UserGroup;
+
 import org.geoserver.geofence.services.rest.exception.ConflictRestEx;
 import org.geoserver.geofence.services.rest.exception.GeoFenceRestEx;
 import org.geoserver.geofence.services.rest.exception.BadRequestRestEx;
 import org.geoserver.geofence.services.rest.exception.InternalErrorRestEx;
 import org.geoserver.geofence.services.rest.exception.NotFoundRestEx;
-import java.util.List;
-
-
-import org.geoserver.geofence.core.model.GSUser;
-import org.geoserver.geofence.core.model.UserGroup;
 import org.geoserver.geofence.services.dto.RuleFilter;
 import org.geoserver.geofence.services.dto.RuleFilter.SpecialFilterType;
 import org.geoserver.geofence.services.exception.BadRequestServiceEx;
@@ -25,58 +29,54 @@ import org.geoserver.geofence.services.rest.model.RESTOutputUser;
 import org.geoserver.geofence.services.rest.model.RESTShortUser;
 import org.geoserver.geofence.services.rest.model.RESTShortUserList;
 import org.geoserver.geofence.services.rest.model.util.IdName;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RestController("restUserService")
 public class RESTUserServiceImpl
         extends BaseRESTServiceImpl
         implements RESTUserService {
 
     private static final Logger LOGGER = LogManager.getLogger(RESTUserServiceImpl.class);
 
-//    private UserAdminService userAdminService;
-//    private UserGroupAdminService userGroupAdminService;
-
     @Override
-    public Response delete(String username, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity<String> delete(String name, boolean cascade) throws ConflictRestEx, NotFoundRestEx, InternalErrorRestEx {
         try {
             if ( cascade ) {
-                ruleAdminService.deleteRulesByUser(username);
+                ruleAdminService.deleteRulesByUser(name);
             } else {
                 RuleFilter filter = new RuleFilter(SpecialFilterType.ANY);
-                filter.setUser(username);
+                filter.setUser(name);
                 filter.getUser().setIncludeDefault(false);
                 long cnt = ruleAdminService.count(filter);
                 if ( cnt > 0 ) {
-                    throw new ConflictRestEx("Existing rules reference the user " + username);
+                    throw new ConflictRestEx("Existing rules reference the user " + name);
                 }
             }
 
-            GSUser user = userAdminService.getFull(username); // may throw NotFoundServiceEx
+            GSUser user = userAdminService.getFull(name); // may throw NotFoundServiceEx
 
             if ( ! userAdminService.delete(user.getId())) {
                 LOGGER.warn("ILLEGAL STATE -- User not found: " + user); // this should not happen
                 throw new NotFoundRestEx("ILLEGAL STATE -- User not found: " + user);
             }
 
-            return Response.status(Status.OK).entity("OK\n").build();
+            return ResponseEntity.ok("OK\n");            
 
         } catch (GeoFenceRestEx ex) { // already handled
             throw ex;
         } catch (NotFoundServiceEx ex) {
-            LOGGER.warn("User not found: " + username);
-            throw new NotFoundRestEx("User not found: " +username);
+            LOGGER.warn("User not found: " + name);
+            throw new NotFoundRestEx("User not found: " +name);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             throw new InternalErrorRestEx(ex.getMessage());
@@ -98,7 +98,7 @@ public class RESTUserServiceImpl
     }
 
     @Override
-    public Response insert(RESTInputUser user) throws BadRequestRestEx, NotFoundRestEx, InternalErrorRestEx, ConflictRestEx {
+    public ResponseEntity<Long> insert(RESTInputUser user) throws BadRequestRestEx, NotFoundRestEx, InternalErrorRestEx, ConflictRestEx {
 
 
         boolean exists;
@@ -147,9 +147,12 @@ public class RESTUserServiceImpl
             u.setFullName(user.getFullName());
             u.setEmailAddress(user.getEmailAddress());
 
-            Long ret = userAdminService.insert(u);
+            Long id = userAdminService.insert(u);
 
-            return Response.status(Status.CREATED).tag(ret.toString()).entity(ret).build();
+            return ResponseEntity
+                    .created(URI.create(id.toString()))
+                    .eTag(id.toString())
+                    .body(id);            
 
         } catch (GeoFenceRestEx ex) {
             // already handled
@@ -253,8 +256,13 @@ public class RESTUserServiceImpl
     }
 
     @Override
-    public long count(String nameLike) {
-        return userAdminService.getCount(nameLike);
+    public Long count(String nameLike) {
+        try {
+            return userAdminService.getCount(nameLike);
+        } catch (Exception ex) {
+            LOGGER.warn("Unexpected exception", ex);
+            throw new RuntimeException(ex);
+        }
     }
 
     // ==========================================================================

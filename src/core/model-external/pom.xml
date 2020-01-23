@@ -125,7 +125,14 @@
                                 </replaceregexp>
 
                                 <replaceregexp byline="true" replace="">
-                                    <regexp pattern="(@Id|@GeneratedValue|@Enumerated|@Column|@Type|@Temporal|@OneToOne|@ManyToOne|@ManyToMany|@ForeignKey|@UniqueConstraint|@AttributeOverride|@JoinTable).*"/>
+                                    <regexp pattern="(@Id|@GeneratedValue|@Enumerated|@Column|@Type|@Temporal|@OneToOne|@ManyToOne|@ManyToMany|@UniqueConstraint|@AttributeOverride|@JoinTable).*"/>
+                                    <fileset dir="${project.build.directory}/generated-sources/original">
+                                        <include name="**/*.java"/>
+                                    </fileset>
+                                </replaceregexp>
+                                
+                                <replaceregexp byline="true" replace="">
+                                    <regexp pattern=".*(@ForeignKey|@JoinColumn).*"/>
                                     <fileset dir="${project.build.directory}/generated-sources/original">
                                         <include name="**/*.java"/>
                                     </fileset>

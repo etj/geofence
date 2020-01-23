@@ -58,12 +58,14 @@ import java.util.ArrayList;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+@RestController("restConfigService")
 public class RESTConfigServiceImpl implements RESTConfigService {
 
     private static final Logger LOGGER = LogManager.getLogger(RESTConfigServiceImpl.class);
@@ -239,7 +241,7 @@ public class RESTConfigServiceImpl implements RESTConfigService {
 
 
     /**
-     * @deprecated misbehaves since usergroups introduction. Please use backup()
+     * @Deprecated misbehaves since usergroups introduction. Please use backup()
      */
     @Override
     public RESTFullConfiguration getConfiguration(Boolean includeGRUsers) {

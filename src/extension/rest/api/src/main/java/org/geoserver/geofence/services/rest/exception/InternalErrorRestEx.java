@@ -5,8 +5,7 @@
 
 package org.geoserver.geofence.services.rest.exception;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import org.springframework.http.HttpStatus;
 
 /**
  *
@@ -20,6 +19,6 @@ public class InternalErrorRestEx extends GeoFenceRestEx {
     private static final long serialVersionUID = 9014519381293787498L;
 
     public InternalErrorRestEx(String message) {
-        super(message, Response.status(Status.INTERNAL_SERVER_ERROR).type("text/plain").entity(message).build());
+        super(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 }

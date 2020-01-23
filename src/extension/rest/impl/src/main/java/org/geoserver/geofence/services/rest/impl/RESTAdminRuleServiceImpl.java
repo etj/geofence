@@ -5,6 +5,7 @@
 
 package org.geoserver.geofence.services.rest.impl;
 
+import java.net.URI;
 import java.util.List;
 
 import org.geoserver.geofence.core.model.AdminRule;
@@ -27,19 +28,21 @@ import org.geoserver.geofence.services.rest.model.RESTOutputAdminRuleList;
 import org.geoserver.geofence.services.rest.model.RESTRulePosition.RulePosition;
 import org.geoserver.geofence.services.rest.RESTAdminRuleService;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.http.ResponseEntity;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author ETj (etj at geo-solutions.it)
  */
+
+@RestController("restAdminRuleService")
 public class RESTAdminRuleServiceImpl
         extends BaseRESTServiceImpl
         implements RESTAdminRuleService {
@@ -62,7 +65,7 @@ public class RESTAdminRuleServiceImpl
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, value = "geofenceTransactionManager")
-    public Response insert(RESTInputAdminRule inputAdminRule) throws NotFoundRestEx, BadRequestRestEx, InternalErrorRestEx {
+    public ResponseEntity<Long> insert(RESTInputAdminRule inputAdminRule) throws NotFoundRestEx, BadRequestRestEx, InternalErrorRestEx {
 
         if (inputAdminRule.getPosition() == null || inputAdminRule.getPosition().getPosition() == null) {
             throw new BadRequestRestEx("Bad position: " + inputAdminRule.getPosition());
@@ -83,7 +86,10 @@ public class RESTAdminRuleServiceImpl
         try {
             Long id = adminRuleAdminService.insert(rule, position);
 
-            return Response.status(Status.CREATED).tag(id.toString()).entity(id).build();
+            return ResponseEntity
+                    .created(URI.create(id.toString()))
+                    .eTag(id.toString())
+                    .body(id);
         } catch (BadRequestServiceEx ex) {
             LOGGER.error(ex.getMessage());
             throw new BadRequestRestEx(ex.getMessage());
@@ -155,15 +161,15 @@ public class RESTAdminRuleServiceImpl
     }
 
     @Override
-    public Response delete(Long id) throws NotFoundRestEx, InternalErrorRestEx {
+    public ResponseEntity delete(Long id) throws NotFoundRestEx, InternalErrorRestEx {
         try {
             if (!adminRuleAdminService.delete(id)) {
                 LOGGER.warn("Rule not found: " + id);
                 throw new NotFoundRestEx("Rule not found: " + id);
             }
 
-            return Response.status(Status.OK).entity("OK\n").build();
-
+            return ResponseEntity.ok("OK\n");
+            
         } catch (GeoFenceRestEx ex) { // already handled
             throw ex;
         } catch (NotFoundServiceEx ex) {
